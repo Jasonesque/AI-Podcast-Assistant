@@ -10,6 +10,10 @@ class Settings(BaseModel):
     MIMO_API_BASE: str = "https://token-plan-cn.xiaomimimo.com/v1"
     MODEL_NAME: str = "mimo-v2.5"
 
+    # Feishu Bot Settings
+    FEISHU_APP_ID: str = os.getenv("FEISHU_APP_ID", "")
+    FEISHU_APP_SECRET: str = os.getenv("FEISHU_APP_SECRET", "")
+
     # Paths
     WORKSPACE_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     TMP_AUDIO_DIR: str = os.path.join(WORKSPACE_DIR, "tmp_audio")

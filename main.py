@@ -30,6 +30,7 @@ def process_podcast(url: str):
         print(f"Cleaned up temporary audio: {audio_path}")
 
     print("\n=== Pipeline Completed Successfully! ===")
+    return summary
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Podcast AI Feishu Bot - Local Tester")
