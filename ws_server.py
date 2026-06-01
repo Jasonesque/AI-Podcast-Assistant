@@ -16,18 +16,14 @@ def process_and_reply(open_id: str, url: str):
     except Exception as e:
         feishu.send_message(open_id, f"❌ 处理失败，请检查终端日志: {str(e)}")
 
-def do_message_receive(data: lark.CustomizedEvent) -> None:
+def do_message_receive(data: lark.im.v1.P2ImMessageReceiveV1) -> None:
     try:
-        # Lark WS returns event as bytes in CustomEvent
-        event_str = data.event.decode('utf-8') if isinstance(data.event, bytes) else str(data.event)
-        event_dict = json.loads(event_str)
+        message = data.event.message
+        sender = data.event.sender.sender_id
+        open_id = sender.open_id
         
-        message = event_dict.get("event", {}).get("message", {})
-        sender = event_dict.get("event", {}).get("sender", {}).get("sender_id", {})
-        open_id = sender.get("open_id")
-        
-        if message.get("message_type") == "text":
-            content_str = message.get("content", "{}")
+        if message.message_type == "text":
+            content_str = message.content
             content_dict = json.loads(content_str)
             text = content_dict.get("text", "").strip()
             
@@ -42,7 +38,7 @@ def do_message_receive(data: lark.CustomizedEvent) -> None:
 
 # The first two parameters are encryption_key and verification_token, which are not strictly needed for WS local dev
 event_handler = lark.EventDispatcherHandler.builder("", "") \
-    .register_customized_event("im.message.receive_v1", do_message_receive) \
+    .register_p2_im_message_receive_v1(do_message_receive) \
     .build()
 
 def main():
