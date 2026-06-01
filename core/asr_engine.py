@@ -7,14 +7,21 @@ from config import settings
 # 修复 Windows 下找不到 cublas64_12.dll 的问题
 # ==========================================
 try:
+    import sys
     # 获取虚拟环境中的 site-packages 路径
-    for sp in site.getsitepackages():
-        cudnn_path = os.path.join(sp, "nvidia", "cudnn", "bin")
-        cublas_path = os.path.join(sp, "nvidia", "cublas", "bin")
-        if os.path.exists(cudnn_path):
-            os.add_dll_directory(cudnn_path)
-        if os.path.exists(cublas_path):
-            os.add_dll_directory(cublas_path)
+    site_packages = [p for p in sys.path if 'site-packages' in p]
+    if site_packages:
+        sp = site_packages[0]
+        paths_to_add = [
+            os.path.join(sp, "nvidia", "cudnn", "bin"),
+            os.path.join(sp, "nvidia", "cublas", "bin"),
+            os.path.join(sp, "nvidia", "cuda_nvrtc", "bin"),
+            os.path.join(sp, "nvidia", "cuda_runtime", "bin")
+        ]
+        for p in paths_to_add:
+            if os.path.exists(p):
+                os.add_dll_directory(p)
+                os.environ["PATH"] = p + os.pathsep + os.environ.get("PATH", "")
 except Exception as e:
     print(f"Warning: Failed to add CUDA DLL directories: {e}")
 

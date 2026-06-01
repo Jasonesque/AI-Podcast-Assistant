@@ -14,7 +14,6 @@ def summarize_transcript(transcript: str, title: str) -> str:
     这是一期名为《{title}》的播客逐字稿。请你作为专业的播客总结助手，根据以下文本生成一份高质量的结构化总结。
 
     请严格按照以下格式输出 Markdown：
-    # {title}
     
     ## 🎯 一句话核心
     (用一句话概括这期播客最核心的价值)
