@@ -10,6 +10,8 @@ def download_audio(url: str) -> str:
     ydl_opts = {
         'format': 'bestaudio/best',
         'outtmpl': os.path.join(settings.TMP_AUDIO_DIR, '%(id)s.%(ext)s'),
+        'retries': 10,
+        'fragment_retries': 10,
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
