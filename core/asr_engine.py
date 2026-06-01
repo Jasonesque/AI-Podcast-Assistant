@@ -20,6 +20,8 @@ def transcribe_audio(audio_path: str) -> str:
     transcript = ""
     for segment in segments:
         # segment.start, segment.end, segment.text
-        transcript += f"[{segment.start:.2f}s - {segment.end:.2f}s] {segment.text}\n"
+        line = f"[{segment.start:.2f}s - {segment.end:.2f}s] {segment.text}"
+        print(line)  # 实时打印进度，让你知道它没卡死
+        transcript += line + "\n"
 
     return transcript
