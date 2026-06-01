@@ -8,7 +8,7 @@ class Settings(BaseModel):
     # API Settings
     MIMO_API_KEY: str = os.getenv("MIMO_API_KEY", "")
     MIMO_API_BASE: str = "https://token-plan-cn.xiaomimimo.com/v1"
-    MODEL_NAME: str = "mimo2.5"
+    MODEL_NAME: str = "mimo-v2.5"
 
     # Paths
     WORKSPACE_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
