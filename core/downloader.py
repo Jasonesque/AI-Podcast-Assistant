@@ -12,6 +12,7 @@ def download_audio(url: str) -> str:
         'outtmpl': os.path.join(settings.TMP_AUDIO_DIR, '%(id)s.%(ext)s'),
         'retries': 10,
         'fragment_retries': 10,
+        'proxy': '', # Bypass system proxy for direct domestic download
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
