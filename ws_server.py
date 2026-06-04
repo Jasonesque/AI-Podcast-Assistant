@@ -18,21 +18,25 @@ def process_and_reply(open_id: str, url: str):
 
 def do_message_receive(data: lark.im.v1.P2ImMessageReceiveV1) -> None:
     try:
+        import re
         message = data.event.message
         sender = data.event.sender.sender_id
         open_id = sender.open_id
         
-        if message.message_type == "text":
-            content_str = message.content
-            content_dict = json.loads(content_str)
-            text = content_dict.get("text", "").strip()
+        # Feishu Desktop often sends links as 'post' (Rich Text) instead of plain 'text'.
+        # We bypass the type check and just search for any http/https link in the raw JSON string.
+        content_str = message.content
+        
+        # Regex to find the first URL
+        urls = re.findall(r'https?://[^\s\"\'\\]+', content_str)
+        
+        if urls:
+            url = urls[0]
+            # Background thread so we don't block the WS connection
+            threading.Thread(target=process_and_reply, args=(open_id, url)).start()
+        else:
+            feishu.send_message(open_id, "主人好！没识别到有效的网址，请直接发给我包含播客或视频链接的内容。")
             
-            if "http" in text:
-                url = [word for word in text.split() if "http" in word][0]
-                # Background thread so we don't block the WS connection
-                threading.Thread(target=process_and_reply, args=(open_id, url)).start()
-            else:
-                feishu.send_message(open_id, "主人好！请直接扔给我一个包含播客或视频链接的文本。")
     except Exception as e:
         print(f"Error parsing Feishu WS event: {e}")
 
