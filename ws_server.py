@@ -1,8 +1,4 @@
 import os
-# Force Python to ignore system proxies for domestic API connections (Feishu, MIMO)
-for k in ["HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY", "http_proxy", "https_proxy", "all_proxy"]:
-    os.environ.pop(k, None)
-
 import json
 import threading
 import lark_oapi as lark
